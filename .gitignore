@@ -1,3 +1,6 @@
+ibd_car/data/*
+ibd_car/logs/*
+ibd_car/tub/*
 
 env/*
 data/*
