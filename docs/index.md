@@ -5,17 +5,16 @@ developed with a focus on enabling fast experimentation and easy contribution.
 
 ---------
 
-### Build your own Donkey
+### Build your own Donkey2
 
-Donkey is the standard car that most people build first. The parts cost about $250 to $300 and take 2 hours to assemble. Here are the main steps to build your own car:
+Donkey2 is the standard car that most people build first. The parts cost about $250 to $300 and take 2 hours to assemble. Here are the main steps to build your own car:
 
 1. [Assemble hardware.](guide/build_hardware.md)
 2. [Install software.](guide/install_software.md)
-3. [Create Donkey App.](guide/create_application.md)
-4. [Calibrate your car.](guide/calibrate.md)
-5. [Start driving.](guide/get_driving.md)
-6. [Train an autopilot.](guide/train_autopilot.md)
-7. [Experiment with simulator.](guide/simulator.md)
+3. [Calibrate your car.](guide/calibrate.md)
+4. [Start driving.](guide/get_driving.md)
+5. [Train an autopilot.](guide/train_autopilot.md)
+6. [Experiment with simulator.](guide/simulator.md)
 
 ---------------
 
@@ -37,7 +36,7 @@ cam = dk.parts.PiCamera()
 V.add(cam, outputs=['image'], threaded=True)
 
 #add tub part to record images
-tub = dk.parts.Tub(path='~/mycar/data',
+tub = dk.parts.Tub(path='~/mycar/gettings_started',
                    inputs=['image'],
                    types=['image_array'])
 V.add(tub, inputs=inputs)
@@ -49,7 +48,13 @@ V.start(max_loop_count=100)
 
 ### Installation
 
-[How to install](guide/install_software.md)
+For linux/OS users clone the master branch to get the latest version.
+```bash
+git clone https://github.com/autorope/donkeycar
+pip install -e ./donkeycar
+```
+
+[How to install on Windows](guide/install_software.md)
 
 -----------------------
 

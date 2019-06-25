@@ -5,7 +5,6 @@ from donkeycar.parts.transform import Lambda
 def _get_sample_lambda():
     def f():
         return 1
-    f.update = f
     return Lambda(f)
 
 @pytest.fixture()

@@ -17,3 +17,4 @@ def test_json_output(server):
     assert int(d[0]) == 0
 
 
+

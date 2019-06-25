@@ -1,4 +1,4 @@
-# How to Build a Donkey&reg;
+# How to Build a Donkey&reg; V2
 
 &nbsp;
 
@@ -47,20 +47,16 @@ For more detail and other options, follow the link to: [supported cars](/support
 
 ![donkey](../assets/build_hardware/donkey.PNG)
 
+## Classic Donkey Car.  
+We had an old design before which is no longer maintained... it can be found [here](/legacy.md)
+
 
 &nbsp;
 ## Roll Your Own Car
 Alternatively If you know RC or need something the standard Donkey does not support, you can roll your own.  Here is a quick reference to help you along the way.  [Roll Your Own](/roll_your_own.md)
 
-## Video Overview of Hardware Assembly
-
-This [video](https://www.youtube.com/watch?v=OaVqWiR2rS0&t=48s) covers how to assemble a standard Donkey Car, it also covers the Sombrero, the Raspberry Pi and the nVidia Jetson Nano.  
-
-[![IMAGE ALT TEXT HERE](../assets/HW_Video.png)](https://www.youtube.com/watch?v=OaVqWiR2rS0&t=48s)
-
-
 ## Parts Needed:
-The following instructions are for the Raspbeery Pi, below in Optional Upgrades section, you can find the NVIDIA Jetson Nano instructions.  
+
 
 ### Option 1: Buying through an official Donkey Store
 There are two official stores:
@@ -74,7 +70,7 @@ If you are in Asia, the DIYRobocars community in Hong Kong also sells car kits a
 | Exceed Magnet, Desert Monster, Blaze, or Short Course Truck                                                                       | See links above                                     | ~$90              |
 | USB Battery with microUSB cable (any battery capable of 2A 5V output is sufficient) | [Anker 6700 mAh](http://amzn.to/2ptshm0)                                           | $17              |
 | Raspberry Pi 3                                                                      | [amazon.com/gp/product/B01CD5VC92](https://www.amazon.com/gp/product/B01CD5VC92?tag=donkeycar-20)                                          | $38              |
-| MicroSD Card (many will work, we strongly recommend this one)             | [amazon.com/gp/product/B01HU3Q6F2](https://www.amazon.com/gp/product/B01HU3Q6F2?tag=donkeycar-20)                                         | $18.99           |
+| MicroSD Card (many will work, I like this one because it boots quickly)             | [amazon.com/gp/product/B01HU3Q6F2](https://www.amazon.com/gp/product/B01HU3Q6F2?tag=donkeycar-20)                                         | $18.99           |
 | Donkey Partial Kit                                                      | [KIT](https://store.donkeycar.com/collections/frontpage)                                        | $82 to $125              |
 
 
@@ -117,17 +113,7 @@ If you want to buy the parts yourself, want to customize your donkey or live out
 | LiPo Battery                                          | [hobbyking.com/en_us/turnigy-1800mah-2s-20c-lipo-pack.html](https://hobbyking.com/en_us/turnigy-1800mah-2s-20c-lipo-pack.html) or [amazon.com/gp/product/B0072AERBE/](https://www.amazon.com/gp/product/B0072AERBE/) | $8.94 to $~17           |
 | Lipo Charger (takes 1hr to charge the above battery)  | [amazon.com/gp/product/B00XU4ZR06](https://www.amazon.com/gp/product/B00XU4ZR06?tag=donkeycar-20)                                               | $13              |
 | Lipo Battery Case (to prevent damage if they explode) | [amazon.com/gp/product/B00T01LLP8](https://www.amazon.com/gp/product/B00T01LLP8?tag=donkeycar-20)                                               | $8               |
-* **NVIDIA JetsonNano Hardware Options**  The NVIDIA Jetson Nano is fully supported by the donkey Car.  To assemble the Donkey Car you will need a few parts including the Wifi card, Anennas and camera documented [here](https://github.com/NVIDIA-AI-IOT/jetbot).  In addition you will need this [Adapter](https://store.donkeycar.com/products/jetson-donkey-adapter) if you want to print it yourself it is on the Thingiverse page for the project.
 
-![adapter](../assets/Jetson_Adapter.jpg)
-
-Plug in the Servo driver the same as the Raspberry Pi, just keep in mind that the Jetson pinout is reversed.
-
-![Jetson Servo](../assets/Servo_Wiring.png)
-
-Finally this is the Donkey Assembled.  
-
-![Jetson Assembled](../assets/Jetbot_Assembled.png)
 
 
 &nbsp;
@@ -158,8 +144,6 @@ If you have an Exceed Short Course Truck, Blaze or Desert Monster watch this [vi
 
 This is a relatively simple assembly step.   Just use the 3mm self tapping screws to scew the plate to the roll cage.  
 
-When attaching the roll cage to the top plate, ensure that the nubs on the top plate face the roll-cage. This will ensure the equipment you mount to the top plate fits easily.
-
 &nbsp;
 ### Step 4: Connect Servo Shield to Raspberry Pi.
 
@@ -185,7 +169,7 @@ Attach the USB battery to the underside of the printed bottom plate using cable 
 &nbsp;
 ### Step 6: Attach Camera
 Slip the camera into the slot, cable end first.  However, be careful not to push on the camera lens and instead press the board.
-![donkey](../assets/build_hardware/assemble_camera.jpg)
+![donkey](../assets/build_hardware/assemble camera.jpg)
 
 If you need to remove the camera the temptation is to push on the lens, instead push on the connector as is shown in these pictures.  
 ![donkey](../assets/build_hardware/Remove--good.jpg) ![donkey](../assets/build_hardware/Remove--bad.jpg)
