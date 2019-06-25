@@ -22,7 +22,7 @@ class KerasPilot:
         pass
 
     def train(self, train_gen, val_gen,
-              saved_model_path, epochs=100, steps=100, train_split=0.8,
+              saved_model_path, logs_name, epochs=100, steps=100, train_split=0.8,
               verbose=1, min_delta=.0005, patience=5, use_early_stop=True):
         """
         train_gen: generator that yields an array of images an array of
@@ -35,7 +35,8 @@ class KerasPilot:
                                     verbose=verbose,
                                     save_best_only=True,
                                     mode='min')
-        tb_log_path = "logs/" + str(int(time.time()))
+
+        tb_log_path = "logs/" + str(logs_name)  + "_" + str(int(time.time()))
         if not os.path.exists(tb_log_path):
             os.makedirs(tb_log_path)
         tb_callback = TensorBoard(tb_log_path)

@@ -4,13 +4,14 @@ Scripts to drive a donkey 2 car and train a model for it.
 
 Usage:
     manage.py (drive) [--model=<model>] [--js] [--chaos]
-    manage.py (train) [--tub=<tub1,tub2,..tubn>]  (--model=<model>) [--base_model=<base_model>] [--no_cache]
+    manage.py (train) [--tub=<tub1,tub2,..tubn>]  (--model=<model>) [--base_model=<base_model>] [--no_cache] [--logs=<logs>]
 
 Options:
     -h --help        Show this screen.
     --tub TUBPATHS   List of paths to tubs. Comma separated. Use quotes to use wildcards. ie "~/tubs/*"
     --js             Use physical joystick.
     --chaos          Add periodic random steering when manually driving
+    --logs logs          Name used to save tensorboard logs : <circuit_model>
 """
 import os
 from docopt import docopt
@@ -141,7 +142,7 @@ def drive(cfg, model_path=None, use_joystick=False, use_chaos=False):
             max_loop_count=cfg.MAX_LOOPS)
 
 
-def train(cfg, tub_names, new_model_path, base_model_path=None):
+def train(cfg, tub_names, new_model_path, base_model_path=None, logs_name=None):
     """
     use the specified data in tub_names to train an artifical neural network
     saves the output trained model as model_name
@@ -156,6 +157,9 @@ def train(cfg, tub_names, new_model_path, base_model_path=None):
         base_model_path = os.path.expanduser(base_model_path)
         kl.load(base_model_path)
 
+    if not logs_name:
+        logs_name = "unknown_default"
+    print('logs_name', logs_name)
     print('tub_names', tub_names)
     if not tub_names:
         tub_names = os.path.join(cfg.DATA_PATH, '*')
@@ -175,7 +179,8 @@ def train(cfg, tub_names, new_model_path, base_model_path=None):
              val_gen,
              saved_model_path=new_model_path,
              steps=steps_per_epoch,
-             train_split=cfg.TRAIN_TEST_SPLIT)
+             train_split=cfg.TRAIN_TEST_SPLIT,
+             logs_name=logs_name)
 
 
 if __name__ == '__main__':
@@ -190,5 +195,6 @@ if __name__ == '__main__':
         new_model_path = args['--model']
         base_model_path = args['--base_model']
         cache = not args['--no_cache']
-        train(cfg, tub, new_model_path, base_model_path)
+        logs_name = args['--logs']
+        train(cfg, tub, new_model_path, base_model_path, logs_name)
 
