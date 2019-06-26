@@ -4,7 +4,7 @@ Scripts to drive a donkey 2 car and train a model for it.
 
 Usage:
     manage.py (drive) [--model=<model>] [--js] [--chaos]
-    manage.py (train) [--tub=<tub1,tub2,..tubn>]  (--model=<model>) [--base_model=<base_model>] [--no_cache] [--logs=<logs>]
+    manage.py (train) [--tub=<tub1,tub2,..tubn>]  (--model=<model>) [--base_model=<base_model>] [--no_cache] [--logs=<logs>] [--cv=<cv>]
 
 Options:
     -h --help        Show this screen.
@@ -12,6 +12,7 @@ Options:
     --js             Use physical joystick.
     --chaos          Add periodic random steering when manually driving
     --logs logs          Name used to save tensorboard logs : <circuit_model>
+    --cv cv          Inform if the image has been preprocessed with opencv, if yes, with which algorithm
 """
 import os
 from docopt import docopt
@@ -142,7 +143,7 @@ def drive(cfg, model_path=None, use_joystick=False, use_chaos=False):
             max_loop_count=cfg.MAX_LOOPS)
 
 
-def train(cfg, tub_names, new_model_path, base_model_path=None, logs_name=None):
+def train(cfg, tub_names, new_model_path, base_model_path=None, logs_path=None, cv_mode=None):
     """
     use the specified data in tub_names to train an artifical neural network
     saves the output trained model as model_name
@@ -152,18 +153,18 @@ def train(cfg, tub_names, new_model_path, base_model_path=None, logs_name=None):
 
     new_model_path = os.path.expanduser(new_model_path)
 
-    kl = KerasLinear()
+    kl = KerasLinear(cv_mode)
     if base_model_path is not None:
         base_model_path = os.path.expanduser(base_model_path)
         kl.load(base_model_path)
 
-    if not logs_name:
-        logs_name = "unknown_default"
-    print('logs_name', logs_name)
+    if not logs_path:
+        logs_path = "logs/unknown_default"
+    print('logs_path', logs_path)
     print('tub_names', tub_names)
     if not tub_names:
         tub_names = os.path.join(cfg.DATA_PATH, '*')
-    tubgroup = TubGroup(tub_names)
+    tubgroup = TubGroup(tub_names, cv_mode)
     train_gen, val_gen = tubgroup.get_train_val_gen(X_keys, y_keys,
                                                     batch_size=cfg.BATCH_SIZE,
                                                     train_frac=cfg.TRAIN_TEST_SPLIT)
@@ -180,7 +181,7 @@ def train(cfg, tub_names, new_model_path, base_model_path=None, logs_name=None):
              saved_model_path=new_model_path,
              steps=steps_per_epoch,
              train_split=cfg.TRAIN_TEST_SPLIT,
-             logs_name=logs_name)
+             logs_path=logs_path)
 
 
 if __name__ == '__main__':
@@ -195,6 +196,7 @@ if __name__ == '__main__':
         new_model_path = args['--model']
         base_model_path = args['--base_model']
         cache = not args['--no_cache']
-        logs_name = args['--logs']
-        train(cfg, tub, new_model_path, base_model_path, logs_name)
+        logs_path = args['--logs']
+        cv_mode = args['--cv']
+        train(cfg, tub, new_model_path, base_model_path, logs_path, cv_mode)
 

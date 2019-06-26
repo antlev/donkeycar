@@ -245,6 +245,8 @@ class Tub(object):
             if typ == 'image_array':
                 img = Image.open((val))
                 val = np.array(img)
+                if self.cv_mode == "canny":
+                    val = np.reshape(val, (120, 160, 1))
 
             data[key] = val
         return data
@@ -628,11 +630,12 @@ class TubTimeStacker(TubImageStacker):
 
 
 class TubGroup(Tub):
-    def __init__(self, tub_paths_arg):
+    def __init__(self, tub_paths_arg, cv_mode=None):
         tub_paths = util.files.expand_path_arg(tub_paths_arg)
         logger.info('TubGroup:tubpaths: {}'.format(tub_paths))
         self.tubs = [Tub(path) for path in tub_paths]
         self.input_types = {}
+        self.cv_mode = cv_mode
 
         record_count = 0
         for t in self.tubs:
