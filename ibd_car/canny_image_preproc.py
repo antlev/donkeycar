@@ -1,7 +1,7 @@
 import os, cv2
 from shutil import copyfile
 
-dataset_name="data/datset/tredzone_2"
+dataset_name="data/dataset/chambre_ant_l1"
 new_dataset_name=dataset_name + "_cv/"
 dataset_name=dataset_name + "/"
 
