@@ -72,16 +72,9 @@ class KerasLinear(KerasPilot):
         super(KerasLinear, self).__init__(*args, **kwargs)
         if model:
             self.model = model
-        elif num_outputs is not None:
-            if cv_mode == "canny":
-                self.model = canny_linear()
-            else :
-                self.model = default_linear()
         else:
-            if cv_mode == "canny":
-                self.model = canny_linear()
-            else :
-                self.model = default_linear()
+            self.model = default_linear(cv_mode)
+
 
     def run(self, img_arr):
         img_arr = img_arr.reshape((1,) + img_arr.shape)
@@ -92,10 +85,13 @@ class KerasLinear(KerasPilot):
         return steering[0][0], throttle[0][0]
 
 
-def default_linear():
-    img_in = Input(shape=(120, 160, 3), name='img_in')
-    x = img_in
+def default_linear(cv_mode=None):
+    if cv_mode in ["canny"]:
+        img_in = Input(shape=(120, 160, 1), name='img_in')
+    else: 
+        img_in = Input(shape=(120, 160, 3), name='img_in')
 
+    x = img_in
     # Convolution2D class name is an alias for Conv2D
     x = Convolution2D(filters=24, kernel_size=(5, 5), strides=(2, 2), activation='relu')(x)
     x = Convolution2D(filters=32, kernel_size=(5, 5), strides=(2, 2), activation='relu')(x)
@@ -123,33 +119,3 @@ def default_linear():
 
     return model
 
-def canny_linear():
-    img_in = Input(shape=(120, 160, 1), name='img_in')
-    x = img_in
-
-    # Convolution2D class name is an alias for Conv2D
-    x = Convolution2D(filters=24, kernel_size=(5, 5), strides=(2, 2), activation='relu')(x)
-    x = Convolution2D(filters=32, kernel_size=(5, 5), strides=(2, 2), activation='relu')(x)
-    x = Convolution2D(filters=64, kernel_size=(5, 5), strides=(2, 2), activation='relu')(x)
-    x = Convolution2D(filters=64, kernel_size=(3, 3), strides=(2, 2), activation='relu')(x)
-    x = Convolution2D(filters=64, kernel_size=(3, 3), strides=(1, 1), activation='relu')(x)
-
-    x = Flatten(name='flattened')(x)
-    x = Dense(units=100, activation='linear')(x)
-    x = Dropout(rate=.1)(x)
-    x = Dense(units=50, activation='linear')(x)
-    x = Dropout(rate=.1)(x)
-    # categorical output of the angle
-    angle_out = Dense(units=1, activation='linear', name='angle_out')(x)
-
-    # continous output of throttle
-    throttle_out = Dense(units=1, activation='linear', name='throttle_out')(x)
-
-    model = Model(inputs=[img_in], outputs=[angle_out, throttle_out])
-
-    model.compile(optimizer='adam',
-                  loss={'angle_out': 'mean_squared_error',
-                        'throttle_out': 'mean_squared_error'},
-                  loss_weights={'angle_out': 0.5, 'throttle_out': .5})
-
-    return model
