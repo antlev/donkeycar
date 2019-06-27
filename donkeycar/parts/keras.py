@@ -10,7 +10,7 @@ from tensorflow.python.keras.layers import Input
 from tensorflow.python.keras.models import Model, load_model
 from tensorflow.python.keras.layers import Convolution2D
 from tensorflow.python.keras.layers import Dropout, Flatten, Dense
-from tensorflow.python.keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
+from tensorflow.python.keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard, ReduceLROnPlateau
 import time, os
 
 class KerasPilot:
@@ -31,7 +31,7 @@ class KerasPilot:
 
         # checkpoint to save model after each epoch
         save_best = ModelCheckpoint(saved_model_path,
-                                    monitor='val_loss',
+                                    monitor='val_angle_out_loss',
                                     verbose=verbose,
                                     save_best_only=True,
                                     mode='min')
@@ -43,13 +43,15 @@ class KerasPilot:
 
 
         # stop training if the validation error stops improving.
-        early_stop = EarlyStopping(monitor='val_loss',
+        early_stop = EarlyStopping(monitor='val_angle_out_loss',
                                    min_delta=min_delta,
                                    patience=patience,
                                    verbose=verbose,
                                    mode='auto')
 
-        callbacks_list = [save_best, tb_callback]
+        reduce_lr_on_plateau = ReduceLROnPlateau(monitor="loss")
+
+        callbacks_list = [save_best, tb_callback, reduce_lr_on_plateau]
 
         if use_early_stop:
             callbacks_list.append(early_stop)
@@ -73,12 +75,12 @@ class KerasLinear(KerasPilot):
         elif num_outputs is not None:
             if cv_mode == "canny":
                 self.model = canny_linear()
-            else : 
+            else :
                 self.model = default_linear()
         else:
             if cv_mode == "canny":
                 self.model = canny_linear()
-            else : 
+            else :
                 self.model = default_linear()
 
     def run(self, img_arr):
