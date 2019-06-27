@@ -12,6 +12,7 @@ import json
 import datetime
 import random
 import tarfile
+import cv2
 
 import numpy as np
 import pandas as pd
@@ -197,6 +198,9 @@ class Tub(object):
 
             elif typ == 'image_array':
                 img = Image.fromarray(np.uint8(val))
+                if not cv_mode:
+                    if cv_mode == "canny":
+                        img = cv2.Canny(img,100,200)
                 name = self.make_file_name(key, ext='.jpg')
                 img.save(os.path.join(self.path, name))
                 json_data[key] = name
@@ -240,7 +244,6 @@ class Tub(object):
         data = {}
         for key, val in record_dict.items():
             typ = self.get_input_type(key)
-
             # load objects that were saved as separate files
             if typ == 'image_array':
                 img = Image.open((val))

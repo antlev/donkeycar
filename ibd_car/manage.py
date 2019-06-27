@@ -3,7 +3,7 @@
 Scripts to drive a donkey 2 car and train a model for it.
 
 Usage:
-    manage.py (drive) [--model=<model>] [--js] [--chaos]
+    manage.py (drive) [--model=<model>] [--js] [--chaos] [--cv=<cv>]
     manage.py (train) [--tub=<tub1,tub2,..tubn>]  (--model=<model>) [--base_model=<base_model>] [--no_cache] [--logs=<logs>] [--cv=<cv>]
 
 Options:
@@ -30,7 +30,7 @@ from donkeypart_ps3_controller import PS3JoystickController
 #from donkeypart_ps3_controller import *
 
 
-def drive(cfg, model_path=None, use_joystick=False, use_chaos=False):
+def drive(cfg, model_path=None, use_joystick=False, use_chaos=False, cv_mode=None):
     """
     Construct a working robotic vehicle from many parts.
     Each part runs as a job in the Vehicle loop, calling either
@@ -135,7 +135,7 @@ def drive(cfg, model_path=None, use_joystick=False, use_chaos=False):
     # tub = th.new_tub_writer(inputs=inputs, types=types)
 
     # single tub
-    tub = TubWriter(path=cfg.TUB_PATH, inputs=inputs, types=types)
+    tub = TubWriter(path=cfg.TUB_PATH, inputs=inputs, types=types, cv_mode=cv_mode)
     V.add(tub, inputs=inputs, run_condition='recording')
 
     # run the vehicle
@@ -188,8 +188,9 @@ if __name__ == '__main__':
     args = docopt(__doc__)
     cfg = dk.load_config()
 
+    cv_mode = args['--cv']
     if args['drive']:
-        drive(cfg, model_path=args['--model'], use_joystick=args['--js'], use_chaos=args['--chaos'])
+        drive(cfg, model_path=args['--model'], use_joystick=args['--js'], use_chaos=args['--chaos'], cv_mode=cv_mode)
 
     elif args['train']:
         tub = args['--tub']
@@ -197,6 +198,5 @@ if __name__ == '__main__':
         base_model_path = args['--base_model']
         cache = not args['--no_cache']
         logs_path = args['--logs']
-        cv_mode = args['--cv']
         train(cfg, tub, new_model_path, base_model_path, logs_path, cv_mode)
 
